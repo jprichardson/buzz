@@ -12,37 +12,37 @@ STDERR output in red.
 === Usage
 
 Install it via npm:
----
+----
 npm install buzz
----
+----
 
 Then run:
----
+----
 buzz 240 your_cool_app param1 param2
----
+----
 
 The first parameter to buzz is the time in seconds that it'll be killed and
 restarted. So, `your_cool_app` would be killed and restarted after four minutes.
 
 If you don't want buzz to kill your app, but you want it to bring it back to
 life if it dies, run:
----
+----
 buzz your_cool_app param1 param2
----
+----
 
 You can test buzz by running his the app `buzz_test`:
----
+----
 buzz_test
-___
+----
 
 `buzz_test` runs the app `smarty_pants` that spews out random facts to you and
 taunts you. Occasionally `smarty_pants` will commit suicide, but buzz will
 bring him back to life.
 
 `buzz_test` ends up actualy just running the following command:
----
+----
 buzz 10 smarty_pants 2000 0.15
----
+----
 
 Which will kill smarty pants every 10 seconds and bring him back to life. Also,
 every two seconds, smarty pants will spit out a random fact. Approximately, every
