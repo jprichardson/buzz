@@ -57,6 +57,9 @@ to make this. =)
 
 But really, it's utility is that it's a much simpler Forever.
 
+The name comes from Buzz Lightyear in the movie Toy Story. His popular phrase was: To infinity and beyond!
+
+
 === License
 
 (The MIT License)
