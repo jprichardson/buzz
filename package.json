@@ -1,18 +1,18 @@
 {
-       "name"          : "kill_restart"
-     , "version"       : "0.0.1"
+       "name"          : "buzz"
+     , "version"       : "0.0.2"
      , "description"   : "Buzz is an app to kill an app and then restart it, over and over again. Similar to Forever."
      , "homepage"      : 
      [ 
           "https://github.com/jprichardson/buzz"
      ]
      , "repository"    : { "type" : "git"
-                         , "url"  : "https://github.com/jprichardson/kill_restart"
+                         , "url"  : "https://github.com/jprichardson/buzz"
                          }
      , "keywords"      : ["kill","restart","forever"]
      , "author"        : "JP Richardson <jprichardson@gmail.com>"
      , "licenses"      : ["MIT"]
      , "dependencies"  : { "coffee-script" : ">=1.0.1"}
-     , "bin"           : "bin/kr"
-     , "main"          : "kill_restart"
+     , "bin"           : "bin/buzz"
+     , "main"          : "buzz"
 }
