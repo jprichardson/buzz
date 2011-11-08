@@ -1,6 +1,6 @@
 {
        "name"          : "buzz"
-     , "version"       : "0.0.3"
+     , "version"       : "0.0.4"
      , "description"   : "Buzz is an app to kill an app and then restart it, over and over again. Similar to Forever."
      , "homepage"      : 
      [ 
