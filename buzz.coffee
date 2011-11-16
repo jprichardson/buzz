@@ -19,12 +19,13 @@ SHOULD_KILL = true
 main = ->
   
   _time_secs = parseInt(_args[2])
-  if _time_secs isnt NaN
+  if _time_secs.toString() isnt 'NaN'
     _exec_name = _args[3]
     _args.shift() for i in [0..3] #cut all of the args off
     interval = setInterval killCallback, _time_secs * 1000
     SHOULD_KILL = true
   else #no time passed in, never kill process, but keep it alive forever
+    console.log 'no time'
     _exec_name = _args[2]
     _args.shift() for i in [0..2]
     SHOULD_KILL = false 
@@ -33,6 +34,7 @@ main = ->
   _exec_args = _exec_args.trim()
   #console.log "Executing: #{_exec_name} #{_exec_args}..."
 
+  console.log _time_secs
   startItUp()
 
 startItUp = ->
