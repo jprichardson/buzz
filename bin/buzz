@@ -1,4 +1,74 @@
-#!/usr/bin/env coffee
+#!/usr/bin/env node
 
-path = require('path')
-require(path.join(__dirname,'../buzz'))
+var spawn = require('child_process').spawn
+  , ON_DEATH = require('death')({ue: true}) //trigger on uncaughtException as well
+
+var COLORS = {red: "\u001b[31m", blue: "\u001b[34m", neutral: "\u001b[00m"}
+  , args = process.argv
+  , rekillTimeSecs = parseInt(args[2], 10)
+  , execName = ''
+  , killInterval = null
+  , proc = null
+
+ON_DEATH(function(err) {
+  proc.removeListener('exit', exitCallback)
+  if (killInterval) clearInterval(killInterval)
+  killCallback()
+  
+  setTimeout(function() { //give child process 10 seconds to cleanup
+      process.exit()
+  }, 10*1000)
+})
+
+function main (arguments) {
+  if (rekillTimeSecs.toString !== 'NaN') {
+    execName = args[3]
+    args.splice(0,4)
+    killInterval = setInterval(killCallback, rekillTimeSecs * 1000)
+  } else {
+    execName = args[2]
+    args.splice(0,3)
+  }
+
+  //console.log(execName)
+  //console.dir(args)
+  startItUp()
+}
+
+function startItUp() {
+  console.log(colorString("\nStarting " + execName + " " + args.join(' ') + "...", 'blue'))
+  proc = spawn(execName, args);
+  proc.stdout.on('data', stdoutCallback);
+  proc.stderr.on('data', stderrCallback);
+  proc.on('exit', exitCallback);
+}
+
+function colorString(str, color) {
+  return COLORS[color] + str + COLORS.neutral;
+}
+
+function stderrCallback(data) {
+  console.log(colorString(data.toString('utf8').trim(), 'red'));
+}
+
+function stdoutCallback(data) {
+  console.log(data.toString('utf8').trim());
+}
+
+function exitCallback(code) {
+  console.log(colorString("<=== EXIT: DIED or KILLED ===>", 'red'))
+  startItUp()
+  if (killInterval) {
+    clearInterval(killInterval)
+    killInterval = setInterval(killCallback, rekillTimeSecs * 1000)
+  }
+}
+
+function killCallback() {
+  console.log(colorString("Killling " + proc.pid + "...", 'blue'));
+  proc.kill('SIGTERM');
+}
+
+main()
+
+

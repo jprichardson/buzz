@@ -1,27 +1,33 @@
 {
-       "name"          : "buzz"
-     , "version"       : "0.0.5"
-     , "description"   : "Buzz is an app to kill an app and then restart it, over and over again. Similar to Forever."
-     , "homepage"      : 
-     [ 
-          "https://github.com/jprichardson/buzz"
-     ]
-     , "repository"    : { "type" : "git"
-                         , "url"  : "https://github.com/jprichardson/buzz"
-                         }
-     , "keywords"      : ["kill","restart","forever","buzz"]
-     , "author"        : "JP Richardson <jprichardson@gmail.com>"
-     , "licenses"      : [
-                              { 
-                                   "type" : "MIT"
-                                   ,"url" : "http://github.com/jprichardson/buzz/raw/master/LICENSE"
-                              }
-                         ]
-     , "dependencies"  : { "coffee-script" : ">=1.0.1"}
-     , "bin"           : { 
-                              "buzz" : "./bin/buzz"
-                              , "buzz_test" : "./bin/buzz_test"
-                              , "smarty_pants" : "./bin/smarty_pants" 
-                         }
-     , "main"          : "buzz"
+  "name": "buzz",
+  "version": "0.1.0",
+  "description": "Buzz is an app to kill an app and then restart it, over and over again. Similar to Forever.",
+  "homepage": [
+    "https://github.com/jprichardson/buzz"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jprichardson/buzz"
+  },
+  "keywords": [
+    "kill",
+    "restart",
+    "forever",
+    "buzz"
+  ],
+  "author": "JP Richardson <jprichardson@gmail.com>",
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://github.com/jprichardson/buzz/raw/master/LICENSE"
+    }
+  ],
+  "dependencies": {
+    "death": "0.0.1"
+  },
+  "bin": {
+    "buzz": "./bin/buzz"
+  },
+  "main": "buzz",
+  "preferGlobal": true
 }
