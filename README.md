@@ -1,11 +1,13 @@
-Buzz: A Node.js Command Line Program to Keep Your App Running Indefinitely; Like the Program Forever
+Buzz
 =====================
+
+A Node.js Command Line Program to Keep Your App Running Indefinitely; Like the Program Forever
 
 Buzz is a command line program that can kill your app routinely and restart it. 
 It'll will also restart your app if it dies. It's a lot like the other Node.js
 program [Forever](https://github.com/indexzero/forever).
 
-It's much simpler than Forever. Approximately 50 lines of CoffeeScript code.
+It's much simpler than Forever. Approximately 75 lines of JavaScript code.
 It displays your apps output to STDOUT and also displays any of your apps
 STDERR output in red.
 
@@ -28,7 +30,7 @@ Usage
 
 Install it via npm:
 
-    npm -g install buzz
+    npm install -g buzz
 
 
 Then run:
