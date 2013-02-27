@@ -1,7 +1,9 @@
 #!/usr/bin/env node
 
+//this is super shitty code, sorry in advance
+
 var spawn = require('child_process').spawn
-  , ON_DEATH = require('death')({ue: true}) //trigger on uncaughtException as well
+  , ON_DEATH = require('death')({uncaughtException: true}) //trigger on uncaughtException as well
 
 var COLORS = {red: "\u001b[31m", blue: "\u001b[34m", neutral: "\u001b[00m"}
   , args = process.argv
@@ -9,19 +11,34 @@ var COLORS = {red: "\u001b[31m", blue: "\u001b[34m", neutral: "\u001b[00m"}
   , execName = ''
   , killInterval = null
   , proc = null
+  , quitCountThreshold = 5
+  , quitTimeThreshold = 10000
+  , ondeathCount = 0
+  , startupDelay = 250
 
-ON_DEATH(function(err) {
-  proc.removeListener('exit', exitCallback)
-  if (killInterval) clearInterval(killInterval)
-  killCallback()
-  
-  setTimeout(function() { //give child process 10 seconds to cleanup
-      process.exit()
-  }, 10*1000)
+ON_DEATH(function(signal, err) {
+  ondeathCount += 1
+  if (ondeathCount === 1) {
+    proc.removeListener('exit', exitCallback)
+    if (killInterval) clearInterval(killInterval)
+    killCallback()
+    
+    setTimeout(function() { //give child process 10 seconds to cleanup
+        process.exit()
+    }, 10*1000)
+
+    if (signal === 'SIGINT')
+      console.log("Press ^C again to terminate")
+  } else if (ondeathCount > 1) { //presumably the user really wants to quit
+    console.error("Received multiple death threats. Buzz died.")
+    process.exit(1)
+  }
 })
 
+main()
+
 function main (arguments) {
-  if (rekillTimeSecs.toString !== 'NaN') {
+  if (rekillTimeSecs.toString() !== 'NaN') {
     execName = args[3]
     args.splice(0,4)
     killInterval = setInterval(killCallback, rekillTimeSecs * 1000)
@@ -55,13 +72,26 @@ function stdoutCallback(data) {
   console.log(data.toString('utf8').trim());
 }
 
+var quitCounter = 0
 function exitCallback(code) {
   console.log(colorString("<=== EXIT: DIED or KILLED ===>", 'red'))
-  startItUp()
-  if (killInterval) {
-    clearInterval(killInterval)
-    killInterval = setInterval(killCallback, rekillTimeSecs * 1000)
-  }
+  setTimeout(function() {
+    startItUp()
+    if (killInterval) {
+      clearInterval(killInterval)
+      killInterval = setInterval(killCallback, rekillTimeSecs * 1000)
+    }
+  },startupDelay)
+
+  quitCounter += 1
+  if (quitCounter === 1) { //first time dying, time threshold
+    setTimeout(function() {
+      quitCounter = 0
+    }, quitTimeThreshold)
+  } else if (quitCounter >= quitCountThreshold) {
+    console.error("Quit too soon too often.")
+    process.exit(100)
+  } 
 }
 
 function killCallback() {
@@ -69,6 +99,6 @@ function killCallback() {
   proc.kill('SIGTERM');
 }
 
-main()
+
 
 

@@ -1,3 +1,9 @@
+2013-02-26 / 0.1.1
+------------------
+* Now allows you to hit `^C` twice for a non-clean exit.
+* Does not restart the process if it restarts more than 5 times in 10 seconds.
+* On death of child process, it delays 250 ms before starting it again.
+
 
 2013-01-07 / 0.1.0
 -------------------

@@ -7,7 +7,7 @@ Buzz is a command line program that can kill your app routinely and restart it.
 It'll will also restart your app if it dies. It's a lot like the other Node.js
 program [Forever](https://github.com/indexzero/forever).
 
-It's much simpler than Forever. Approximately 75 lines of JavaScript code.
+It's much simpler than Forever. Approximately 100 lines of JavaScript code.
 It displays your apps output to STDOUT and also displays any of your apps
 STDERR output in red.
 
