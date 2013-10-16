@@ -3,11 +3,12 @@
 var spawn = require('child_process').spawn
   , program = require('commander')
   , colors = require('colors')
-  , ON_DEATH = require('death')({uncaughtException: true}) //trigger on uncaughtException as well
+  , cmd = require('../lib/cmd')
+  , ON_DEATH = require('death')({uncaughtException: false}) //trigger on uncaughtException as well
 
 program.version(require('../package.json').version)
-  .option('-t, --time [time]', 'Kill program after time in (seconds).', Math.pow(2,42)*1000) //default to killing your program in 140k years :)
-  .option('-d, --delay [time]', 'Restart program after delay in (seconds).', 250)
+  .option('-t, --time [time]', 'Kill program after time in (seconds).', Math.pow(2,42)) //default to killing your program in 140k years :)
+  .option('-d, --delay [time]', 'Restart program after delay in (seconds).', 0.250)
   .usage("[options] cmd args")
   .on('--help', function() {
     console.log('  Examples:')
@@ -16,45 +17,28 @@ program.version(require('../package.json').version)
     console.log('')
   })
 
-//cmd is either 2nd,4th,6th arg
-var maybeArgs = [process.argv[2], process.argv[4], process.argv[6]]
-var n = maybeArgs.reduce(function(last, item, i) {
-  if (item && item.indexOf('-') < 0)
-    return (i+1)*2
-  else
-    return last
-},-1)
-
-if (n < 0) {
+var argO = cmd.splitArgs(process.argv)
+if (argO.n < 0) {
   program.parse(process.argv) //program name won't show up then
   console.log(colors.red("\n  Did you pass the command? Here's the help:"))
   return program.help()
 }
 
-var execName = process.argv[n]
-var execArgs = process.argv.splice(n)
-execArgs.shift() //get rid of execName
-
-console.dir(process.argv)
-console.dir(execArgs)
+var execName = argO.execName
+var execArgs = argO.execArgs
 
 program.parse(process.argv)
 
-console.log(program.time)
-console.log(program.delay)
-return
-
 
 var args = process.argv
-  , rekillTimeSecs = parseInt(args[2], 10)
-  , execName = ''
-  , killInterval = null
+  , rekillTimeSecs = +program.time//parseInt(args[2], 10)
+  , killInterval = setInterval(killCallback, rekillTimeSecs * 1000)
   , proc = null
   , quitCountThreshold = 5
   , quitTimeThreshold = 10000
-  , startupDelay = 250
+  , ondeathCount = 0
+  , startupDelay = +program.delay
 
-var ondeathCount = 0
 ON_DEATH(function(signal, err) {
   ondeathCount += 1
   if (ondeathCount === 1) {
@@ -74,26 +58,11 @@ ON_DEATH(function(signal, err) {
   }
 })
 
-main()
-
-function main (arguments) {
-  if (rekillTimeSecs.toString() !== 'NaN') {
-    execName = args[3]
-    args.splice(0,4)
-    killInterval = setInterval(killCallback, rekillTimeSecs * 1000)
-  } else {
-    execName = args[2]
-    args.splice(0,3)
-  }
-
-  //console.log(execName)
-  //console.dir(args)
-  startItUp()
-}
-
+startItUp()
 function startItUp() {
-  console.log(colors.blue("\nStarting " + execName + " " + args.join(' ') + "..."))
-  proc = spawn(execName, args);
+  console.log(colors.blue("\nStarting " + execName + " " + execArgs.join(' ') + "..."))
+  
+  proc = spawn(execName, execArgs)
   proc.stdout.on('data', stdoutCallback);
   proc.stderr.on('data', stderrCallback);
   proc.on('exit', exitCallback);
@@ -116,7 +85,7 @@ function exitCallback(code) {
       clearInterval(killInterval)
       killInterval = setInterval(killCallback, rekillTimeSecs * 1000)
     }
-  },startupDelay)
+  },startupDelay*1000)
 
   quitCounter += 1
   if (quitCounter === 1) { //first time dying, time threshold
