@@ -4,7 +4,7 @@ var TIME = process.argv[2] || 3000
   , DEATH_PROBABILITY = process.argv[3] || 0.10
 
 console.log("Hi. I'm Buzz's friend. Call me Smarty Pants.")
-console.log("You've set my input to print statements every " + TIME + " milliseconds and to die  approximately every " + (TIME / DEATH_PROBABILITY) + " milliseconds.")
+console.log("You've set my input to print statements every " + TIME + " milliseconds and to die  approximately every " + (TIME / DEATH_PROBABILITY).toFixed(2) + " milliseconds.")
 
 var phrases = [
   "I'm still alive!", 
