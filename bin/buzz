@@ -17,6 +17,10 @@ program.version(require('../package.json').version)
     console.log('')
   })
 
+//these should be made into params in the future
+var quitCountThreshold = 5
+var quitTimeThreshold = 10000
+
 var argO = cmd.splitArgs(process.argv)
 if (argO.n < 0) {
   program.parse(process.argv) //program name won't show up then
@@ -29,16 +33,10 @@ var execArgs = argO.execArgs
 
 program.parse(process.argv)
 
+var killInterval = setInterval(killCallback, +program.time * 1000)
+var proc = null
 
-var args = process.argv
-  , rekillTimeSecs = +program.time//parseInt(args[2], 10)
-  , killInterval = setInterval(killCallback, rekillTimeSecs * 1000)
-  , proc = null
-  , quitCountThreshold = 5
-  , quitTimeThreshold = 10000
-  , ondeathCount = 0
-  , startupDelay = +program.delay
-
+var ondeathCount = 0
 ON_DEATH(function(signal, err) {
   ondeathCount += 1
   if (ondeathCount === 1) {
@@ -53,7 +51,7 @@ ON_DEATH(function(signal, err) {
     if (signal === 'SIGINT')
       console.log("Press ^C again to terminate")
   } else if (ondeathCount > 1) { //presumably the user really wants to quit
-    console.error("Received multiple death threats. Buzz died.")
+    console.error("  Received multiple death threats. Buzz died.")
     process.exit(1)
   }
 })
@@ -63,16 +61,16 @@ function startItUp() {
   console.log(colors.blue("\nStarting " + execName + " " + execArgs.join(' ') + "..."))
   
   proc = spawn(execName, execArgs)
-  proc.stdout.on('data', stdoutCallback);
-  proc.stderr.on('data', stderrCallback);
-  proc.on('exit', exitCallback);
+  proc.stdout.on('data', stdout)
+  proc.stderr.on('data', stderr)
+  proc.on('exit', exitCallback)
 }
 
-function stderrCallback(data) {
+function stderr(data) {
   console.log(colors.red(data.toString('utf8').trim()))
 }
 
-function stdoutCallback(data) {
+function stdout(data) {
   console.log(data.toString('utf8').trim());
 }
 
@@ -83,9 +81,9 @@ function exitCallback(code) {
     startItUp()
     if (killInterval) {
       clearInterval(killInterval)
-      killInterval = setInterval(killCallback, rekillTimeSecs * 1000)
+      killInterval = setInterval(killCallback, +program.time * 1000)
     }
-  },startupDelay*1000)
+  },+program.delay*1000)
 
   quitCounter += 1
   if (quitCounter === 1) { //first time dying, time threshold
