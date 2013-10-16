@@ -1,9 +1,15 @@
 #!/usr/bin/env node
 
-//this is super shitty code, sorry in advance
-
 var spawn = require('child_process').spawn
+  , program = require('commander')
+  , colors = require('colors')
   , ON_DEATH = require('death')({uncaughtException: true}) //trigger on uncaughtException as well
+
+program.version(require('../package.json').version)
+  .option('-t, --time [time]', 'Kill program after time in (seconds).')
+  .option('-d, --delay [time]', 'Restart program after delay in (seconds).')
+  .parse(process.argv)
+
 
 var COLORS = {red: "\u001b[31m", blue: "\u001b[34m", neutral: "\u001b[00m"}
   , args = process.argv

@@ -22,7 +22,9 @@
     }
   ],
   "dependencies": {
-    "death": "~0.1.0"
+    "death": "~0.1.0",
+    "commander": "~2.0.0",
+    "colors": "~0.6.2"
   },
   "bin": {
     "buzz": "./bin/buzz"
