@@ -7,8 +7,8 @@ var spawn = require('child_process').spawn
   , ON_DEATH = require('death')({uncaughtException: false}) //trigger on uncaughtException as well
 
 program.version(require('../package.json').version)
-  .option('-t, --time [time]', 'Kill program after time in (seconds).', Math.pow(2,42)) //default to killing your program in 140k years :)
-  .option('-d, --delay [time]', 'Restart program after delay in (seconds).', 0.250)
+  .option('-t, --time [time]', 'Kill program after time in (seconds).')
+  .option('-d, --delay [time]', 'Restart program after delay in (seconds).',0.250)
   .usage("[options] cmd args")
   .on('--help', function() {
     console.log('  Examples:')
@@ -33,7 +33,10 @@ var execArgs = argO.execArgs
 
 program.parse(process.argv)
 
-var killInterval = setInterval(killCallback, +program.time * 1000)
+var killInterval = null
+if (program.time)
+  killInterval = setInterval(killCallback, +program.time * 1000)
+
 var proc = null
 
 var ondeathCount = 0
