@@ -3,67 +3,47 @@ Buzz
 
 A Node.js Command Line Program to Keep Your App Running Indefinitely; Like the Program Forever
 
-Buzz is a command line program that can kill your app routinely and restart it. 
-It'll will also restart your app if it dies. It's a lot like the other Node.js
-program [Forever](https://github.com/indexzero/forever).
-
 It's much simpler than Forever. Approximately 100 lines of JavaScript code.
 It displays your apps output to STDOUT and also displays any of your apps
 STDERR output in red.
 
 
 
-Motivation
-----------
+Why?
+----
 
 I have a command line app that is nasty to debug. It's working fine for the first 
-five minutes or so. Thus, Buzz was born. Instead of fixing the bug, I wanted
-to make this. =)
+five minutes or so and then it crashes. Thus, Buzz was born.
 
 But really, it's utility is that it's a much simpler Forever.
 
 The name comes from Buzz Lightyear in the movie Toy Story. His popular phrase was: To infinity and beyond!
 
 
-Usage
------
+Install
+------
 
 Install it via npm:
 
     npm install -g buzz
 
 
-Then run:
-
-    buzz 240 your_cool_app param1 param2
-
-
-The first parameter to buzz is the time in seconds that it'll be killed and
-restarted. So, `your_cool_app` would be killed and restarted after four minutes.
-
-If you don't want buzz to kill your app, but you want it to bring it back to
-life if it dies, run:
-
-    buzz your_cool_app param1 param2
+Usage
+-----
 
 
-You can test buzz by running his the app `buzz_test`:
+    Usage: buzz [options] cmd args
 
-    ./bin/buzz_test
+    Options:
 
+      -h, --help          output usage information
+      -V, --version       output the version number
+      -t, --time [time]   Kill program after time in (seconds).
+      -d, --delay [time]  Restart program after delay in (seconds).
 
-`buzz_test` runs the app `smarty_pants` that spews out random facts to you and
-taunts you. Occasionally `smarty_pants` will commit suicide, but buzz will
-bring him back to life.
+    Examples:
 
-`buzz_test` ends up actualy just running the following command:
-
-    buzz 10 smarty_pants 2000 0.15
-
-
-Which will kill smarty pants every 10 seconds and bring him back to life. Also,
-every two seconds, smarty pants will spit out a random fact. Approximately, every
-13 seconds smarty pants will take his own life, but Buzz will bring him back.
+      $ buzz -t 3600 your-long-running-script.sh --input-file records.txt
 
 
 
