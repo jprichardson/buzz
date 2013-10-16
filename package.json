@@ -1,6 +1,6 @@
 {
   "name": "buzz",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Buzz is a command line app to kill an app and then restart it, over and over again. Similar to Forever.",
   "repository": {
     "type": "git",

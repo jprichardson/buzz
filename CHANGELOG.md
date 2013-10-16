@@ -1,3 +1,9 @@
+2013-10-16 / 0.2.0
+------------------
+* added deps: `commander`, and `colors`
+* cli has changed
+* added param `delay`
+
 2013-02-26 / 0.1.1
 ------------------
 * Now allows you to hit `^C` twice for a non-clean exit.
