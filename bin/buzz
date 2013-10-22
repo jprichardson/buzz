@@ -31,7 +31,7 @@ if (argO.n < 0) {
 var execName = argO.execName
 var execArgs = argO.execArgs
 
-program.parse(process.argv)
+program.parse(argO.buzzArgs)
 
 var killInterval = null
 if (program.time)
