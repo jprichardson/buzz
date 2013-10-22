@@ -1,3 +1,7 @@
+2013-10-21 / 0.2.1
+------------------
+* fixed bug that would cause an error if program had same args as `buzz`. Closes #6
+
 2013-10-16 / 0.2.0
 ------------------
 * added deps: `commander`, and `colors`
